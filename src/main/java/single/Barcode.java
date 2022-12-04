@@ -1,4 +1,4 @@
-package usables;
+package single;
 
 import net.sourceforge.barbecue.BarcodeException;
 import net.sourceforge.barbecue.BarcodeFactory;
