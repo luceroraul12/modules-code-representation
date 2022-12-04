@@ -17,17 +17,19 @@ import java.util.List;
 public class MultiBarcodeProduct {
 
 
-    public static void createPdf(List<Product> products) throws IOException {
+    public static PDDocument createPdf(List<Product> products) throws IOException {
         PDDocument document = new PDDocument();
 
         OverflowOnSamePageTableDrawer.builder()
                 .table(createTable())
                 .startX(50)
-                .lanesPerPage(3)
+                .lanesPerPage(2)
                 .spaceInBetween(25)
                 .endY(50F)
                 .build()
                 .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
+
+        return document;
     }
 
     private static Table createTable(){
@@ -42,7 +44,10 @@ public class MultiBarcodeProduct {
                 .borderWidth(1F)
                 .build();
 
-        tableBuilder.addRow(Row.builder().add(headerCell).build());
+        tableBuilder.addRow(Row.builder()
+                .add(headerCell)
+                .add(headerCell)
+                .build());
 
         //About barcodes
         for (int i = 0; i < 200; i++) {
