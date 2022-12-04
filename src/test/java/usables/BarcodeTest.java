@@ -13,8 +13,7 @@ class BarcodeTest {
     void generateEAN13BarcodeImage() throws IOException {
         File file = new File("test.jpg");
 
-        String text = "homito@23425";
-        BufferedImage imageCreated = Barcode.generateForIdProduct(text);
+        BufferedImage imageCreated = Barcode.generateByProduct("1324", "verdulerias");
 
         ImageIO.write(imageCreated, "JPG", file);
 
