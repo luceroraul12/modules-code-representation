@@ -1,19 +1,20 @@
 package usables;
 
-import org.krysalis.barcode4j.impl.code128.Code128Bean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
+import net.sourceforge.barbecue.BarcodeException;
+import net.sourceforge.barbecue.BarcodeFactory;
+import net.sourceforge.barbecue.BarcodeImageHandler;
+import net.sourceforge.barbecue.output.OutputException;
 
 import java.awt.image.BufferedImage;
 
 public class Barcode {
-    public static BufferedImage generateByProduct(String id, String name) {
-        Code128Bean generator = new Code128Bean();
-        BitmapCanvasProvider canvas =
-                new BitmapCanvasProvider(200, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+    public static BufferedImage generateByProduct(String id, String name)
+            throws BarcodeException, OutputException {
+        net.sourceforge.barbecue.Barcode barcode = BarcodeFactory.createCode128(id);
 
-        String barcodeText = name +"@"+ id;
-
-        generator.generateBarcode(canvas, barcodeText);
-        return canvas.getBufferedImage();
+        barcode.setResolution(200);
+        barcode.setBarWidth(5);
+        barcode.setLabel(name +" @ "+id);
+        return BarcodeImageHandler.getImage(barcode);
     }
 }
