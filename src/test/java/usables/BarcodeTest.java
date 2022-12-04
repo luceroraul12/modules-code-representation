@@ -1,6 +1,5 @@
 package usables;
 
-import com.google.zxing.WriterException;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
@@ -11,10 +10,10 @@ import java.io.IOException;
 class BarcodeTest {
 
     @Test
-    void generateEAN13BarcodeImage() throws WriterException, IOException {
+    void generateEAN13BarcodeImage() throws IOException {
         File file = new File("test.jpg");
 
-        String text = "homito uwu";
+        String text = "homito@23425";
         BufferedImage imageCreated = Barcode.generateForIdProduct(text);
 
         ImageIO.write(imageCreated, "JPG", file);
