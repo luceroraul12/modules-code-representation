@@ -1,16 +1,25 @@
 package multi;
 
 import entities.Product;
+import net.sourceforge.barbecue.BarcodeException;
+import net.sourceforge.barbecue.output.OutputException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.vandeseer.easytable.OverflowOnSamePageTableDrawer;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
+import org.vandeseer.easytable.structure.cell.ImageCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
+import single.Barcode;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,9 +30,9 @@ public class MultiBarcodeProduct {
         PDDocument document = new PDDocument();
 
         OverflowOnSamePageTableDrawer.builder()
-                .table(createTable())
+                .table(createTable(products, document))
                 .startX(50)
-                .lanesPerPage(2)
+                .lanesPerPage(4)
                 .spaceInBetween(25)
                 .endY(50F)
                 .build()
@@ -32,9 +41,8 @@ public class MultiBarcodeProduct {
         return document;
     }
 
-    private static Table createTable(){
+    private static Table createTable(List<Product> products, PDDocument document){
         TableBuilder tableBuilder = Table.builder()
-                .addColumnOfWidth(60)
                 .addColumnOfWidth(60);
 
         //About header
@@ -46,23 +54,34 @@ public class MultiBarcodeProduct {
 
         tableBuilder.addRow(Row.builder()
                 .add(headerCell)
-                .add(headerCell)
                 .build());
 
         //About barcodes
-        for (int i = 0; i < 200; i++) {
-            tableBuilder.addRow(
-                    Row.builder()
-                            .add(TextCell.builder()
-                                    .text("a " + i)
-                                    .borderWidth(1F)
-                                    .build())
-                            .add(TextCell.builder()
-                                    .text("b " + i)
-                                    .borderWidth(1F)
-                                    .build())
-                            .build());
-        }
+        products.forEach(
+                product -> {
+                    BufferedImage barcode;
+                    PDImageXObject image;
+
+                    try {
+                        barcode = Barcode.generateByProduct(product);
+                        image = JPEGFactory.createFromImage(document, barcode);
+                    } catch (BarcodeException | OutputException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    ImageCell imageCell = ImageCell.builder()
+                            .verticalAlignment(VerticalAlignment.MIDDLE)
+                            .horizontalAlignment(HorizontalAlignment.CENTER)
+                            .image(image)
+                            .build();
+
+                    tableBuilder.addRow(
+                            Row.builder()
+                                    .add(imageCell)
+                                    .build());
+                }
+        );
+
 
         return tableBuilder.build();
 

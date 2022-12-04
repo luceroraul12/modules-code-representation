@@ -1,5 +1,6 @@
 package single;
 
+import entities.Product;
 import net.sourceforge.barbecue.BarcodeException;
 import net.sourceforge.barbecue.output.OutputException;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,9 @@ class BarcodeTest {
             throws IOException, OutputException, BarcodeException {
         File file = new File("test.jpg");
 
-        BufferedImage imageCreated = Barcode.generateByProduct("1", "Granola con miel y avena");
+        Product product = new Product("1", "Granola con miel y avena");
+
+        BufferedImage imageCreated = Barcode.generateByProduct(product);
 
         ImageIO.write(imageCreated, "JPG", file);
 
