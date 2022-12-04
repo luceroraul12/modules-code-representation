@@ -32,8 +32,8 @@ public class MultiBarcodeProduct {
         OverflowOnSamePageTableDrawer.builder()
                 .table(createTable(products, document))
                 .startX(50)
-                .lanesPerPage(4)
-                .spaceInBetween(25)
+                .lanesPerPage(2)
+                .spaceInBetween(0)
                 .endY(50F)
                 .build()
                 .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
@@ -43,18 +43,19 @@ public class MultiBarcodeProduct {
 
     private static Table createTable(List<Product> products, PDDocument document){
         TableBuilder tableBuilder = Table.builder()
-                .addColumnOfWidth(60);
+                .addColumnsOfWidth(250)
+                .verticalAlignment(VerticalAlignment.MIDDLE)
+                .horizontalAlignment(HorizontalAlignment.CENTER);
 
-        //About header
-        TextCell headerCell = TextCell.builder()
-                .text("Codigos de Barra")
-                .backgroundColor(Color.blue)
-                .borderWidth(1F)
-                .build();
-
-        tableBuilder.addRow(Row.builder()
-                .add(headerCell)
-                .build());
+//        //About header
+//        TextCell headerCell = TextCell.builder()
+//                .text("Codigos de Barra")
+//                .borderWidth(1F)
+//                .build();
+//
+//        tableBuilder.addRow(Row.builder()
+//                .add(headerCell)
+//                .build());
 
         //About barcodes
         products.forEach(
@@ -70,13 +71,13 @@ public class MultiBarcodeProduct {
                     }
 
                     ImageCell imageCell = ImageCell.builder()
-                            .verticalAlignment(VerticalAlignment.MIDDLE)
-                            .horizontalAlignment(HorizontalAlignment.CENTER)
                             .image(image)
+                            .borderWidth(1)
                             .build();
 
                     tableBuilder.addRow(
                             Row.builder()
+                                    .height(Float.parseFloat("70"))
                                     .add(imageCell)
                                     .build());
                 }

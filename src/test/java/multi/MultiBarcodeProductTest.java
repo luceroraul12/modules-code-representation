@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,12 +18,12 @@ class MultiBarcodeProductTest {
     void createPdf() throws IOException {
 
         File file = new File("products.pdf");
-        List<Product> products = Arrays.asList(
-                new Product("1","avena"),
-                new Product("2","mani"),
-                new Product("3","verduras"),
-                new Product("4","frutos secos")
-        );
+        List<Product> products = new ArrayList<>();
+        for (int i = 0; i < 100; i++){
+            products.add(
+                    new Product(Integer.toString(i), "producto-"+i)
+            );
+        }
 
 
         PDDocument pdf = MultiBarcodeProduct.createPdf(products);
