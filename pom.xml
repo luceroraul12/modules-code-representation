@@ -18,12 +18,14 @@
             <groupId>net.sourceforge.barbecue</groupId>
             <artifactId>barbecue</artifactId>
             <version>1.5-beta1</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>com.github.vandeseer</groupId>
             <artifactId>easytable</artifactId>
             <version>0.8.5</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -31,6 +33,7 @@
             <artifactId>junit-jupiter</artifactId>
             <version>RELEASE</version>
             <scope>test</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
